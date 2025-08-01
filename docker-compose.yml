@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  etl-api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OLTP_DB_HOST=host.docker.internal
+      - OLTP_DB_PORT=5432
+      - OLTP_DB_NAME=etl
+      - OLTP_DB_USER=postgres
+      - OLTP_DB_PASSWORD=paul010.
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - etl-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  etl-network:
+    external: true
+    name: etl-network

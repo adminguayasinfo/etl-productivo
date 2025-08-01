@@ -1,0 +1,10 @@
+.vscode/
+.venv/
+__pycache__/
+*.pyc
+.env
+logs/
+data/raw/
+*.db
+venv/
+.claude/

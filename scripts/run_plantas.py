@@ -1,0 +1,200 @@
+#!/usr/bin/env python3
+"""
+Script para ejecutar el pipeline de plantas.
+Carga datos desde stg_planta a la estructura operational usando el pipeline PlantasOperationalPipeline.
+"""
+
+import sys
+import os
+from datetime import datetime
+from pathlib import Path
+
+# Agregar el directorio raíz al path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import click
+from loguru import logger
+
+from config.connections.database import db_connection
+from src.pipelines.operational_refactored.plantas_operational_refactored_pipeline import PlantasOperationalRefactorizedPipeline
+
+
+# Configurar logger
+log_dir = Path("logs")
+log_dir.mkdir(exist_ok=True)
+log_file = log_dir / f"plantas_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+
+# Configurar loguru
+logger.add(
+    log_file,
+    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
+    level="INFO"
+)
+
+
+@click.command()
+@click.option('--batch-size', 
+              default=100,
+              type=int,
+              help='Tamaño del lote para procesamiento')
+@click.option('--dry-run', 
+              is_flag=True,
+              help='Ejecutar en modo de prueba (no modifica datos)')
+def run_pipeline(batch_size: int, dry_run: bool):
+    """Ejecutar pipeline de plantas."""
+    
+    logger.info("=== INICIANDO PIPELINE DE PLANTAS ===")
+    logger.info(f"Batch size: {batch_size}")
+    logger.info(f"Modo de prueba: {dry_run}")
+    logger.info(f"Log file: {log_file}")
+    
+    try:
+        # Verificar conexión a BD
+        logger.info("Verificando conexión a base de datos...")
+        if not db_connection.test_connection():
+            logger.error("❌ No se pudo conectar a la base de datos")
+            sys.exit(1)
+        logger.info("✅ Conexión exitosa")
+        
+        # Verificar datos en staging
+        verify_staging_data()
+        
+        if dry_run:
+            logger.info("🔍 Modo de prueba activado - no se modificarán datos")
+            return
+        
+        # Ejecutar pipeline
+        logger.info("\n🚀 Iniciando procesamiento...")
+        pipeline = PlantasOperationalRefactorizedPipeline(batch_size=batch_size)
+        result = pipeline.run()
+        
+        # Mostrar resultados
+        print_results(result)
+        
+        # Verificar datos después del proceso
+        verify_operational_data()
+        
+        logger.info("\n✅ Pipeline completado exitosamente")
+        
+    except Exception as e:
+        logger.error(f"❌ Error crítico en pipeline: {e}")
+        logger.exception("Detalle del error:")
+        sys.exit(1)
+    finally:
+        logger.info("=== FIN DEL PROCESO ===\n")
+
+
+def verify_staging_data():
+    """Verifica los datos en staging."""
+    logger.info("\n--- Verificación de datos en Staging ---")
+    
+    queries = [
+        ("Total plantas", 'SELECT COUNT(*) FROM "etl-productivo".stg_plantas'),
+        ("Procesados", 'SELECT COUNT(*) FROM "etl-productivo".stg_plantas WHERE processed = true'),
+        ("Pendientes", 'SELECT COUNT(*) FROM "etl-productivo".stg_plantas WHERE processed = false'),
+        ("Con errores", 'SELECT COUNT(*) FROM "etl-productivo".stg_plantas WHERE error_message IS NOT NULL')
+    ]
+    
+    for name, query in queries:
+        try:
+            result = db_connection.execute_query(query)
+            count = result[0][0] if result else 0
+            logger.info(f"  {name}: {count:,}")
+        except Exception as e:
+            logger.warning(f"  Error consultando {name}: {e}")
+    
+    # Mostrar distribución por cultivo
+    try:
+        result = db_connection.execute_query(
+            'SELECT cultivo_1, COUNT(*) FROM "etl-productivo".stg_plantas '
+            'WHERE processed = false AND cultivo_1 IS NOT NULL '
+            'GROUP BY cultivo_1 ORDER BY COUNT(*) DESC LIMIT 10'
+        )
+        if result:
+            logger.info("  Distribución por cultivo (pendientes):")
+            for cultivo, count in result:
+                logger.info(f"    - {cultivo}: {count:,}")
+    except Exception as e:
+        logger.warning(f"  Error consultando distribución por cultivo: {e}")
+
+
+def verify_operational_data():
+    """Verifica los datos cargados en operational."""
+    logger.info("\n--- Verificación de datos en Operational ---")
+    
+    queries = [
+        ("Direcciones", 'SELECT COUNT(*) FROM "etl-productivo".direccion'),
+        ("Asociaciones", 'SELECT COUNT(*) FROM "etl-productivo".asociacion'),
+        ("Tipos de cultivo", 'SELECT COUNT(*) FROM "etl-productivo".tipo_cultivo'),
+        ("Beneficiarios", 'SELECT COUNT(*) FROM "etl-productivo".beneficiario'),
+        ("Beneficios (general)", 'SELECT COUNT(*) FROM "etl-productivo".beneficio'),
+        ("Beneficios plantas", 'SELECT COUNT(*) FROM "etl-productivo".beneficio_plantas'),
+    ]
+    
+    for name, query in queries:
+        try:
+            result = db_connection.execute_query(query)
+            count = result[0][0] if result else 0
+            logger.info(f"  {name}: {count:,}")
+        except Exception as e:
+            logger.warning(f"  Error consultando {name}: {e}")
+    
+    # Mostrar distribución por tipo de cultivo
+    try:
+        result = db_connection.execute_query(
+            'SELECT tc.nombre, COUNT(*) FROM "etl-productivo".beneficio b '
+            'JOIN "etl-productivo".tipo_cultivo tc ON b.tipo_cultivo_id = tc.id '
+            'WHERE b.tipo_beneficio = \'PLANTAS\' '
+            'GROUP BY tc.nombre ORDER BY COUNT(*) DESC'
+        )
+        if result:
+            logger.info("  Distribución por cultivo (beneficios plantas):")
+            for cultivo, count in result:
+                logger.info(f"    - {cultivo}: {count:,}")
+    except Exception as e:
+        logger.warning(f"  Error consultando distribución por cultivo: {e}")
+    
+    # Mostrar hectáreas por cultivo
+    try:
+        result = db_connection.execute_query(
+            'SELECT tc.nombre, SUM(b.hectareas_beneficiadas) as total_ha, COUNT(*) as beneficios '
+            'FROM "etl-productivo".beneficio b '
+            'JOIN "etl-productivo".tipo_cultivo tc ON b.tipo_cultivo_id = tc.id '
+            'WHERE b.tipo_beneficio = \'PLANTAS\' AND b.hectareas_beneficiadas IS NOT NULL '
+            'GROUP BY tc.nombre ORDER BY total_ha DESC'
+        )
+        if result:
+            logger.info("  Hectáreas por cultivo (beneficios plantas):")
+            for cultivo, hectareas, beneficios in result:
+                logger.info(f"    - {cultivo}: {float(hectareas):.2f} ha ({beneficios:,} beneficios)")
+    except Exception as e:
+        logger.warning(f"  Error consultando hectáreas por cultivo: {e}")
+
+
+def print_results(result: dict):
+    """Imprime los resultados del pipeline."""
+    logger.info("\n" + "="*60)
+    logger.info("RESULTADOS DEL PIPELINE")
+    logger.info("="*60)
+    
+    logger.info(f"Estado: {result.get('status', 'unknown')}")
+    if 'duration_seconds' in result:
+        logger.info(f"Duración: {result['duration_seconds']:.2f} segundos")
+    logger.info(f"Total procesados: {result.get('total_processed', 0):,}")
+    logger.info(f"Errores: {result.get('total_errors', 0):,}")
+    logger.info(f"Lotes procesados: {result.get('batches_processed', 0)}")
+    
+    if result.get('total_processed', 0) > 0 and 'duration_seconds' in result:
+        rate = result['total_processed'] / result['duration_seconds']
+        logger.info(f"Velocidad: {rate:.1f} registros/segundo")
+    
+    if 'entities_created' in result:
+        logger.info("\nEntidades creadas:")
+        for entity, count in result['entities_created'].items():
+            logger.info(f"  - {entity}: {count:,}")
+    
+    logger.info("="*60)
+
+
+if __name__ == "__main__":
+    run_pipeline()
