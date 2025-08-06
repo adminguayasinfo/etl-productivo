@@ -88,8 +88,7 @@ class SemillasExcelExtractor:
             'localidad': row.get('RECINTO, COMUNA O SECTOR'),
             'coordenada_x': str(row.get('X')) if row.get('X') is not None else None,
             'coordenada_y': str(row.get('Y')) if row.get('Y') is not None else None,
-            'hectarias_totales': self.safe_float(row.get('HECTAREAS')),
-            'hectarias_beneficiadas': self.safe_float(row.get('HECTAREAS')),  # Mismo valor
+            'hectarias_beneficiadas': self.safe_float(row.get('HECTAREAS')),
             'entrega': self.safe_int(row.get('ENTREGA')),
             'variedad': row.get('VARIEDAD'),
             'cultivo': row.get('CULTIVO 1'),
@@ -138,7 +137,7 @@ class SemillasExcelExtractor:
             'RECINTO, COMUNA O SECTOR': 'localidad',
             'X': 'coordenada_x',
             'Y': 'coordenada_y',
-            'HECTAREAS': 'hectarias_totales',
+            'HECTAREAS': 'hectarias_beneficiadas',
             'ENTREGA': 'entrega',
             'VARIEDAD': 'variedad',
             'CULTIVO 1': 'cultivo',

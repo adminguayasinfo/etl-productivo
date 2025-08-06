@@ -54,7 +54,7 @@ class BeneficioSemillas(Beneficio):
             cedula_responsable=staging_record.cedula_responsable,
             variedad=staging_record.variedad,
             entrega=staging_record.entrega,
-            hectareas=staging_record.hectarias_totales,
+            hectareas=staging_record.hectarias_beneficiadas,
             numero_acta=staging_record.numero_acta,
             observacion=staging_record.observacion
         )

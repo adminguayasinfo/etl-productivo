@@ -15,7 +15,7 @@ from src.matriz_costos.costos_maiz import MatrizCostosMaiz
 from api.models_beneficiarios import (
     BeneficiariosResponse, BeneficiariosPorSubvencion, DistribucionSubvenciones,
     TopBeneficiario, BeneficioCultivo, DetalleSubsidio, ResumenBeneficiarios,
-    TipoBeneficio, TipoCultivo
+    BeneficiariosPorCanton, TipoBeneficio, TipoCultivo
 )
 
 logger = logging.getLogger(__name__)
@@ -276,6 +276,42 @@ class BeneficiariosService:
         
         return top_beneficiarios
     
+    def obtener_beneficiarios_por_canton(self) -> List[BeneficiariosPorCanton]:
+        """Obtiene la distribución de beneficios por cantón para gráfico de barras."""
+        # Query para obtener beneficios agrupados por cantón
+        query = """
+        SELECT 
+            COALESCE(NULLIF(TRIM(d.canton), ''), 'N/A') as canton,
+            COUNT(*) as total_beneficios
+        FROM "etl-productivo".beneficio b
+        INNER JOIN "etl-productivo".beneficiario ben ON b.beneficiario_id = ben.id
+        INNER JOIN "etl-productivo".direccion d ON ben.direccion_id = d.id
+        GROUP BY COALESCE(NULLIF(TRIM(d.canton), ''), 'N/A')
+        ORDER BY COUNT(*) DESC;
+        """
+        
+        cantones_data = []
+        total_beneficios = 0
+        
+        with self.db.engine.connect() as conn:
+            rows = conn.execute(text(query)).fetchall()
+            
+            # Calcular total para porcentajes
+            total_beneficios = sum(int(row[1]) for row in rows)
+            
+            for row in rows:
+                canton = row[0]
+                beneficios = int(row[1])
+                porcentaje = (beneficios / total_beneficios * 100) if total_beneficios > 0 else 0
+                
+                cantones_data.append(BeneficiariosPorCanton(
+                    canton=canton,
+                    total_beneficios=beneficios,
+                    porcentaje=round(porcentaje, 2)
+                ))
+        
+        return cantones_data
+    
     def _obtener_detalle_beneficiario(self, beneficiario_id: int) -> TopBeneficiario:
         """Obtiene el análisis completo de un beneficiario específico."""
         # Query para obtener todos los beneficios del beneficiario incluyendo datos personales
@@ -437,7 +473,10 @@ class BeneficiariosService:
             # 4. Top 5 beneficiarios por número de subvenciones + porcentaje de ahorro
             top_beneficiarios_subvenciones = self.obtener_top_beneficiarios_por_subvenciones(5)
             
-            # 5. Resumen ejecutivo (usando el top de ahorro para mantener compatibilidad)
+            # 5. Análisis por cantones para gráfico de barras
+            beneficiarios_por_canton = self.obtener_beneficiarios_por_canton()
+            
+            # 6. Resumen ejecutivo (usando el top de ahorro para mantener compatibilidad)
             resumen = self.generar_resumen_beneficiarios(beneficiarios_por_subv, top_beneficiarios_ahorro)
             
             return BeneficiariosResponse(
@@ -445,6 +484,7 @@ class BeneficiariosService:
                 distribucion_subvenciones=distribucion,
                 top_beneficiarios_por_ahorro=top_beneficiarios_ahorro,
                 top_beneficiarios_por_subvenciones=top_beneficiarios_subvenciones,
+                beneficiarios_por_canton=beneficiarios_por_canton,
                 resumen=resumen
             )
             

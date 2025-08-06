@@ -22,8 +22,7 @@ class StgSemilla(StagingBase, TimestampMixin):
     localidad = Column(String(200), nullable=True)  # RECINTO, COMUNA O SECTOR
     coordenada_x = Column(String(50), nullable=True)  # X
     coordenada_y = Column(String(50), nullable=True)  # Y
-    hectarias_totales = Column(DECIMAL(10, 2), nullable=True)  # HECTAREAS
-    hectarias_beneficiadas = Column(DECIMAL(10, 2), nullable=True)  # HECTAREAS (mismo valor)
+    hectarias_beneficiadas = Column(DECIMAL(10, 2), nullable=True)  # HECTAREAS
     entrega = Column(Integer, nullable=True)  # ENTREGA
     variedad = Column(String(100), nullable=True)  # VARIEDAD
     cultivo = Column(String(100), nullable=True)  # CULTIVO 1

@@ -70,6 +70,13 @@ class TopBeneficiario(BaseModel):
     porcentaje_reduccion: float = Field(description="Porcentaje de reducción en costos")
 
 
+class BeneficiariosPorCanton(BaseModel):
+    """Análisis de beneficiarios por cantón para gráfico de barras."""
+    canton: str = Field(description="Nombre del cantón")
+    total_beneficios: int = Field(description="Total de beneficios otorgados en el cantón")
+    porcentaje: float = Field(description="Porcentaje del total de beneficios")
+
+
 class ResumenBeneficiarios(BaseModel):
     """Resumen ejecutivo de beneficiarios."""
     total_beneficiarios_unicos: int
@@ -95,6 +102,9 @@ class BeneficiariosResponse(BaseModel):
     
     # 4. Top 5 beneficiarios por número de subvenciones y luego por % de ahorro
     top_beneficiarios_por_subvenciones: List[TopBeneficiario] = Field(description="Top 5 ordenado por más subvenciones, luego por % de ahorro")
+    
+    # 5. Análisis por cantones para gráfico de barras
+    beneficiarios_por_canton: List[BeneficiariosPorCanton] = Field(description="Distribución de beneficios por cantón ordenada DESC")
     
     # Resumen ejecutivo
     resumen: ResumenBeneficiarios

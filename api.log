@@ -1,0 +1,541 @@
+2025-08-06 13:25:09,648 - __main__ - INFO - Realizando verificaciones previas...
+2025-08-06 13:25:10,046 - __main__ - INFO - ✓ Dependencias verificadas correctamente
+2025-08-06 13:25:10,046 - __main__ - INFO - ✓ Estructura del proyecto verificada
+2025-08-06 13:25:10,046 - __main__ - INFO - ✓ Variables de entorno configuradas
+2025-08-06 13:25:10,046 - __main__ - INFO - ✅ Todas las verificaciones pasaron correctamente
+INFO:     Will watch for changes in these directories: ['/home/paul/Desktop/Code/dashboard/etl-productivo']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [381371] using StatReload
+============================================================
+🚀 INICIANDO API REST - ANÁLISIS DE COSTOS DE ARROZ
+============================================================
+
+
+
+🌐 Servidor iniciando en: http://0.0.0.0:8000
+📚 Documentación disponible en: http://0.0.0.0:8000/docs
+🔍 Endpoint principal: http://0.0.0.0:8000/prod/analisis-costos-arroz
+💚 Health check: http://0.0.0.0:8000/health
+
+Para detener el servidor presiona Ctrl+C
+============================================================
+INFO:     Started server process [381385]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-08-06 13:27:16,046 - api.main - INFO - Iniciando cálculo de indicadores productivos...
+2025-08-06 13:27:16,046 - api.services_indicadores - INFO - Iniciando cálculo de indicadores productivos completos...
+2025-08-06 13:27:16,046 - api.services_indicadores - INFO - Calculando indicador de reducción de costos ponderado...
+2025-08-06 13:27:16,046 - api.services_indicadores - ERROR - Error calculando indicador de reducción de costos: 'DatabaseConnection' object has no attribute 'get_connection'
+2025-08-06 13:27:16,046 - api.services_indicadores - ERROR - Error obteniendo indicadores completos: 'DatabaseConnection' object has no attribute 'get_connection'
+2025-08-06 13:27:16,046 - api.main - ERROR - Error al obtener indicadores productivos: 'DatabaseConnection' object has no attribute 'get_connection'
+INFO:     127.0.0.1:59506 - "GET /productivo-indicadores HTTP/1.1" 500 Internal Server Error
+WARNING:  StatReload detected changes in 'api/services_indicadores.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [381385]
+INFO:     Started server process [383368]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'api/services_indicadores.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [383368]
+Process SpawnProcess-3:
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/usr/lib/python3/dist-packages/uvicorn/_subprocess.py", line 78, in subprocess_started
+    target(sockets=sockets)
+  File "/usr/lib/python3/dist-packages/uvicorn/server.py", line 62, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1516, in uvloop.loop.Loop.run_until_complete
+  File "/usr/lib/python3/dist-packages/uvicorn/server.py", line 69, in serve
+    config.load()
+  File "/usr/lib/python3/dist-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/paul/Desktop/Code/dashboard/etl-productivo/api/main.py", line 20, in <module>
+    from api.services_indicadores import IndicadoresService
+  File "/home/paul/Desktop/Code/dashboard/etl-productivo/api/services_indicadores.py", line 110
+    if not beneficiarios:
+IndentationError: unexpected indent
+WARNING:  StatReload detected changes in 'api/services_indicadores.py'. Reloading...
+Process SpawnProcess-4:
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/usr/lib/python3/dist-packages/uvicorn/_subprocess.py", line 78, in subprocess_started
+    target(sockets=sockets)
+  File "/usr/lib/python3/dist-packages/uvicorn/server.py", line 62, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1516, in uvloop.loop.Loop.run_until_complete
+  File "/usr/lib/python3/dist-packages/uvicorn/server.py", line 69, in serve
+    config.load()
+  File "/usr/lib/python3/dist-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/paul/Desktop/Code/dashboard/etl-productivo/api/main.py", line 20, in <module>
+    from api.services_indicadores import IndicadoresService
+  File "/home/paul/Desktop/Code/dashboard/etl-productivo/api/services_indicadores.py", line 121
+    suma_ponderada = 0.0
+                        ^
+IndentationError: unindent does not match any outer indentation level
+WARNING:  StatReload detected changes in 'api/services_indicadores.py'. Reloading...
+INFO:     Started server process [383788]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'api/services_indicadores.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [383788]
+Process SpawnProcess-6:
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/usr/lib/python3/dist-packages/uvicorn/_subprocess.py", line 78, in subprocess_started
+    target(sockets=sockets)
+  File "/usr/lib/python3/dist-packages/uvicorn/server.py", line 62, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1516, in uvloop.loop.Loop.run_until_complete
+  File "/usr/lib/python3/dist-packages/uvicorn/server.py", line 69, in serve
+    config.load()
+  File "/usr/lib/python3/dist-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/paul/Desktop/Code/dashboard/etl-productivo/api/main.py", line 20, in <module>
+    from api.services_indicadores import IndicadoresService
+  File "/home/paul/Desktop/Code/dashboard/etl-productivo/api/services_indicadores.py", line 123
+    hectareas_totales = 0.0
+IndentationError: unexpected indent
+WARNING:  StatReload detected changes in 'api/services_indicadores.py'. Reloading...
+Process SpawnProcess-7:
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/usr/lib/python3/dist-packages/uvicorn/_subprocess.py", line 78, in subprocess_started
+    target(sockets=sockets)
+  File "/usr/lib/python3/dist-packages/uvicorn/server.py", line 62, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1516, in uvloop.loop.Loop.run_until_complete
+  File "/usr/lib/python3/dist-packages/uvicorn/server.py", line 69, in serve
+    config.load()
+  File "/usr/lib/python3/dist-packages/uvicorn/config.py", line 458, in load
+    self.loaded_app = import_from_string(self.app)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/uvicorn/importer.py", line 21, in import_from_string
+    module = importlib.import_module(module_str)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/paul/Desktop/Code/dashboard/etl-productivo/api/main.py", line 20, in <module>
+    from api.services_indicadores import IndicadoresService
+  File "/home/paul/Desktop/Code/dashboard/etl-productivo/api/services_indicadores.py", line 152
+    if suma_pesos > 0:
+                      ^
+IndentationError: unindent does not match any outer indentation level
+WARNING:  StatReload detected changes in 'api/services_indicadores.py'. Reloading...
+INFO:     Started server process [384158]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'api/services_indicadores.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [384158]
+INFO:     Started server process [384215]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-08-06 13:28:28,802 - api.main - INFO - Iniciando cálculo de indicadores productivos...
+2025-08-06 13:28:28,802 - api.services_indicadores - INFO - Iniciando cálculo de indicadores productivos completos...
+2025-08-06 13:28:28,802 - api.services_indicadores - INFO - Calculando indicador de reducción de costos ponderado...
+2025-08-06 13:28:28,826 - api.services_indicadores - ERROR - Error calculando indicador de reducción de costos: (psycopg2.errors.UndefinedColumn) column b.id_beneficiario does not exist
+LINE 24: ...        JOIN "etl-productivo".beneficiario ben ON b.id_benef...
+                                                              ^
+
+[SQL: 
+            SELECT 
+                ben.id_beneficiario,
+                ben.cedula,
+                ben.nombres_completos,
+                SUM(b.hectareas_beneficiadas) as hectareas_totales,
+                SUM(CASE 
+                    WHEN b.tipo_beneficio = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN b.tipo_beneficio = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN b.tipo_beneficio = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN b.tipo_cultivo = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN b.tipo_cultivo = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) as monto_beneficios_total,
+                SUM(CASE 
+                    WHEN b.tipo_cultivo = 'ARROZ' THEN b.hectareas_beneficiadas * 1590.9875
+                    WHEN b.tipo_cultivo = 'MAIZ' THEN b.hectareas_beneficiadas * 1835.3
+                    ELSE 0 
+                END) as costo_sin_subsidios_total
+            FROM "etl-productivo".beneficio b
+            JOIN "etl-productivo".beneficiario ben ON b.id_beneficiario = ben.id_beneficiario
+            WHERE b.hectareas_beneficiadas > 0
+            GROUP BY ben.id_beneficiario, ben.cedula, ben.nombres_completos
+            HAVING SUM(b.hectareas_beneficiadas) > 0 
+               AND SUM(CASE 
+                    WHEN b.tipo_beneficio = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN b.tipo_beneficio = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN b.tipo_beneficio = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN b.tipo_cultivo = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN b.tipo_cultivo = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) > 0
+            ORDER BY ben.id_beneficiario
+            ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-06 13:28:28,826 - api.services_indicadores - ERROR - Error obteniendo indicadores completos: (psycopg2.errors.UndefinedColumn) column b.id_beneficiario does not exist
+LINE 24: ...        JOIN "etl-productivo".beneficiario ben ON b.id_benef...
+                                                              ^
+
+[SQL: 
+            SELECT 
+                ben.id_beneficiario,
+                ben.cedula,
+                ben.nombres_completos,
+                SUM(b.hectareas_beneficiadas) as hectareas_totales,
+                SUM(CASE 
+                    WHEN b.tipo_beneficio = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN b.tipo_beneficio = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN b.tipo_beneficio = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN b.tipo_cultivo = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN b.tipo_cultivo = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) as monto_beneficios_total,
+                SUM(CASE 
+                    WHEN b.tipo_cultivo = 'ARROZ' THEN b.hectareas_beneficiadas * 1590.9875
+                    WHEN b.tipo_cultivo = 'MAIZ' THEN b.hectareas_beneficiadas * 1835.3
+                    ELSE 0 
+                END) as costo_sin_subsidios_total
+            FROM "etl-productivo".beneficio b
+            JOIN "etl-productivo".beneficiario ben ON b.id_beneficiario = ben.id_beneficiario
+            WHERE b.hectareas_beneficiadas > 0
+            GROUP BY ben.id_beneficiario, ben.cedula, ben.nombres_completos
+            HAVING SUM(b.hectareas_beneficiadas) > 0 
+               AND SUM(CASE 
+                    WHEN b.tipo_beneficio = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN b.tipo_beneficio = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN b.tipo_beneficio = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN b.tipo_cultivo = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN b.tipo_cultivo = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) > 0
+            ORDER BY ben.id_beneficiario
+            ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-06 13:28:28,826 - api.main - ERROR - Error al obtener indicadores productivos: (psycopg2.errors.UndefinedColumn) column b.id_beneficiario does not exist
+LINE 24: ...        JOIN "etl-productivo".beneficiario ben ON b.id_benef...
+                                                              ^
+
+[SQL: 
+            SELECT 
+                ben.id_beneficiario,
+                ben.cedula,
+                ben.nombres_completos,
+                SUM(b.hectareas_beneficiadas) as hectareas_totales,
+                SUM(CASE 
+                    WHEN b.tipo_beneficio = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN b.tipo_beneficio = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN b.tipo_beneficio = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN b.tipo_cultivo = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN b.tipo_cultivo = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) as monto_beneficios_total,
+                SUM(CASE 
+                    WHEN b.tipo_cultivo = 'ARROZ' THEN b.hectareas_beneficiadas * 1590.9875
+                    WHEN b.tipo_cultivo = 'MAIZ' THEN b.hectareas_beneficiadas * 1835.3
+                    ELSE 0 
+                END) as costo_sin_subsidios_total
+            FROM "etl-productivo".beneficio b
+            JOIN "etl-productivo".beneficiario ben ON b.id_beneficiario = ben.id_beneficiario
+            WHERE b.hectareas_beneficiadas > 0
+            GROUP BY ben.id_beneficiario, ben.cedula, ben.nombres_completos
+            HAVING SUM(b.hectareas_beneficiadas) > 0 
+               AND SUM(CASE 
+                    WHEN b.tipo_beneficio = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN b.tipo_beneficio = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN b.tipo_beneficio = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN b.tipo_cultivo = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN b.tipo_cultivo = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) > 0
+            ORDER BY ben.id_beneficiario
+            ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     127.0.0.1:46508 - "GET /productivo-indicadores HTTP/1.1" 500 Internal Server Error
+WARNING:  StatReload detected changes in 'api/services_indicadores.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [384215]
+INFO:     Started server process [384757]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-08-06 13:28:59,515 - api.main - INFO - Iniciando cálculo de indicadores productivos...
+2025-08-06 13:28:59,515 - api.services_indicadores - INFO - Iniciando cálculo de indicadores productivos completos...
+2025-08-06 13:28:59,515 - api.services_indicadores - INFO - Calculando indicador de reducción de costos ponderado...
+2025-08-06 13:28:59,531 - api.services_indicadores - ERROR - Error calculando indicador de reducción de costos: (psycopg2.errors.UndefinedTable) relation "etl-productivo.tipo_beneficio" does not exist
+LINE 25:             INNER JOIN "etl-productivo".tipo_beneficio tb ON...
+                                ^
+
+[SQL: 
+            SELECT 
+                ben.id,
+                ben.cedula,
+                ben.nombres_completos,
+                SUM(b.hectareas_beneficiadas) as hectareas_totales,
+                SUM(CASE 
+                    WHEN tb.nombre = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN tb.nombre = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN tb.nombre = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN tc.nombre = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN tc.nombre = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) as monto_beneficios_total,
+                SUM(CASE 
+                    WHEN tc.nombre = 'ARROZ' THEN b.hectareas_beneficiadas * 1590.9875
+                    WHEN tc.nombre = 'MAIZ' THEN b.hectareas_beneficiadas * 1835.3
+                    ELSE 0 
+                END) as costo_sin_subsidios_total
+            FROM "etl-productivo".beneficio b
+            INNER JOIN "etl-productivo".beneficiario ben ON b.beneficiario_id = ben.id
+            INNER JOIN "etl-productivo".tipo_beneficio tb ON b.tipo_beneficio_id = tb.id
+            INNER JOIN "etl-productivo".tipo_cultivo tc ON b.tipo_cultivo_id = tc.id
+            WHERE b.hectareas_beneficiadas > 0
+            AND tc.nombre IN ('ARROZ', 'MAIZ')
+            GROUP BY ben.id, ben.cedula, ben.nombres_completos
+            HAVING SUM(b.hectareas_beneficiadas) > 0 
+               AND SUM(CASE 
+                    WHEN tb.nombre = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN tb.nombre = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN tb.nombre = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN tc.nombre = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN tc.nombre = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) > 0
+            ORDER BY ben.id
+            ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-06 13:28:59,531 - api.services_indicadores - ERROR - Error obteniendo indicadores completos: (psycopg2.errors.UndefinedTable) relation "etl-productivo.tipo_beneficio" does not exist
+LINE 25:             INNER JOIN "etl-productivo".tipo_beneficio tb ON...
+                                ^
+
+[SQL: 
+            SELECT 
+                ben.id,
+                ben.cedula,
+                ben.nombres_completos,
+                SUM(b.hectareas_beneficiadas) as hectareas_totales,
+                SUM(CASE 
+                    WHEN tb.nombre = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN tb.nombre = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN tb.nombre = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN tc.nombre = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN tc.nombre = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) as monto_beneficios_total,
+                SUM(CASE 
+                    WHEN tc.nombre = 'ARROZ' THEN b.hectareas_beneficiadas * 1590.9875
+                    WHEN tc.nombre = 'MAIZ' THEN b.hectareas_beneficiadas * 1835.3
+                    ELSE 0 
+                END) as costo_sin_subsidios_total
+            FROM "etl-productivo".beneficio b
+            INNER JOIN "etl-productivo".beneficiario ben ON b.beneficiario_id = ben.id
+            INNER JOIN "etl-productivo".tipo_beneficio tb ON b.tipo_beneficio_id = tb.id
+            INNER JOIN "etl-productivo".tipo_cultivo tc ON b.tipo_cultivo_id = tc.id
+            WHERE b.hectareas_beneficiadas > 0
+            AND tc.nombre IN ('ARROZ', 'MAIZ')
+            GROUP BY ben.id, ben.cedula, ben.nombres_completos
+            HAVING SUM(b.hectareas_beneficiadas) > 0 
+               AND SUM(CASE 
+                    WHEN tb.nombre = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN tb.nombre = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN tb.nombre = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN tc.nombre = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN tc.nombre = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) > 0
+            ORDER BY ben.id
+            ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-06 13:28:59,531 - api.main - ERROR - Error al obtener indicadores productivos: (psycopg2.errors.UndefinedTable) relation "etl-productivo.tipo_beneficio" does not exist
+LINE 25:             INNER JOIN "etl-productivo".tipo_beneficio tb ON...
+                                ^
+
+[SQL: 
+            SELECT 
+                ben.id,
+                ben.cedula,
+                ben.nombres_completos,
+                SUM(b.hectareas_beneficiadas) as hectareas_totales,
+                SUM(CASE 
+                    WHEN tb.nombre = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN tb.nombre = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN tb.nombre = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN tc.nombre = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN tc.nombre = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) as monto_beneficios_total,
+                SUM(CASE 
+                    WHEN tc.nombre = 'ARROZ' THEN b.hectareas_beneficiadas * 1590.9875
+                    WHEN tc.nombre = 'MAIZ' THEN b.hectareas_beneficiadas * 1835.3
+                    ELSE 0 
+                END) as costo_sin_subsidios_total
+            FROM "etl-productivo".beneficio b
+            INNER JOIN "etl-productivo".beneficiario ben ON b.beneficiario_id = ben.id
+            INNER JOIN "etl-productivo".tipo_beneficio tb ON b.tipo_beneficio_id = tb.id
+            INNER JOIN "etl-productivo".tipo_cultivo tc ON b.tipo_cultivo_id = tc.id
+            WHERE b.hectareas_beneficiadas > 0
+            AND tc.nombre IN ('ARROZ', 'MAIZ')
+            GROUP BY ben.id, ben.cedula, ben.nombres_completos
+            HAVING SUM(b.hectareas_beneficiadas) > 0 
+               AND SUM(CASE 
+                    WHEN tb.nombre = 'SEMILLAS' THEN b.monto_beneficio_dolares
+                    WHEN tb.nombre = 'FERTILIZANTES' THEN b.monto_beneficio_dolares  
+                    WHEN tb.nombre = 'MECANIZACION' THEN 
+                        CASE 
+                            WHEN tc.nombre = 'ARROZ' THEN b.hectareas_beneficiadas * 200.00
+                            WHEN tc.nombre = 'MAIZ' THEN b.hectareas_beneficiadas * 70.00
+                            ELSE 0
+                        END
+                    ELSE 0 
+                END) > 0
+            ORDER BY ben.id
+            ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     127.0.0.1:43668 - "GET /productivo-indicadores HTTP/1.1" 500 Internal Server Error
+WARNING:  StatReload detected changes in 'api/services_indicadores.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [384757]
+INFO:     Started server process [385176]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-08-06 13:29:27,783 - api.main - INFO - Iniciando cálculo de indicadores productivos...
+2025-08-06 13:29:27,784 - api.services_indicadores - INFO - Iniciando cálculo de indicadores productivos completos...
+2025-08-06 13:29:27,784 - api.services_indicadores - INFO - Calculando indicador de reducción de costos ponderado...
+2025-08-06 13:29:28,122 - api.services_indicadores - INFO - Indicador calculado: 3.14% para 25355 beneficiarios
+2025-08-06 13:29:28,131 - api.services_indicadores - INFO - Indicadores productivos calculados exitosamente
+2025-08-06 13:29:28,131 - api.main - INFO - Indicadores calculados. Reducción promedio: 3.14%
+INFO:     127.0.0.1:56276 - "GET /productivo-indicadores HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47810 - "GET /prod/productivo-indicadores HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:47822 - "GET /favicon.ico HTTP/1.1" 404 Not Found

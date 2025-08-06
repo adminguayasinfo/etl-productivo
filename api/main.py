@@ -16,6 +16,8 @@ from api.models_subsidios import BeneficiosCultivosResponse, ErrorResponse
 from api.services_subsidios import BeneficiosCultivosService
 from api.models_beneficiarios import BeneficiariosResponse
 from api.services_beneficiarios import BeneficiariosService
+from api.models_indicadores import ProductivoIndicadoresResponse
+from api.services_indicadores import IndicadoresService
 
 # Configurar logging
 logging.basicConfig(
@@ -48,6 +50,7 @@ analisis_service = AnalisisCostosService()
 health_service = HealthService()
 beneficios_service = BeneficiosCultivosService()
 beneficiarios_service = BeneficiariosService()
+indicadores_service = IndicadoresService()
 
 @app.get("/", response_model=dict)
 async def root():
@@ -60,6 +63,7 @@ async def root():
             "analisis_completo": "/analisis-costos-arroz",
             "beneficios_cultivos": "/produ/beneficios-cultivos",
             "beneficiarios": "/produ/beneficiarios",
+            "indicadores_productivos": "/productivo-indicadores",
             "resumen": "/resumen",
             "graficos": "/graficos",
             "health_check": "/health",
@@ -272,6 +276,12 @@ async def obtener_beneficiarios():
        - Desempate por mayor porcentaje de ahorro
        - Información personal completa incluida
        - Análisis detallado de efectividad de subsidios múltiples
+       
+    5. Distribución de beneficios por cantón:
+       - Total de beneficios otorgados por cantón (todos los tipos y cultivos)
+       - Porcentaje de participación de cada cantón
+       - Ordenado por mayor cantidad de beneficios
+       - Formato optimizado para gráfico de barras (Eje X: Cantones, Eje Y: Cantidad)
     
     Notas técnicas:
     - Mecanización para arroz usa "Arado + Fangueo" ($200.00/ha)
@@ -297,6 +307,53 @@ async def obtener_beneficiarios():
         raise HTTPException(
             status_code=500,
             detail=f"Error interno al procesar análisis de beneficiarios: {str(e)}"
+        )
+
+@app.get("/productivo-indicadores", response_model=ProductivoIndicadoresResponse)
+async def obtener_indicadores_productivos():
+    """
+    Endpoint de indicadores productivos que proporciona:
+    
+    **Indicador 1: Porcentaje promedio de reducción de costos de producción**
+    
+    Metodología:
+    - Calcula el promedio ponderado de reducción de costos para TODOS los beneficiarios
+    - Ponderación: hectáreas totales × monto total de beneficios por beneficiario
+    - Fórmula por beneficiario: (monto_beneficios / costo_sin_subsidios) × 100
+    - Promedio ponderado: Σ(% reducción × peso) / Σ(peso)
+    
+    El cálculo considera:
+    - **Hectáreas totales**: Suma de hectáreas beneficiadas por agricultor
+    - **Costo sin subsidios**: Hectáreas × costo matriz por cultivo (ARROZ/MAÍZ)
+    - **Monto beneficios**: Suma de todos los beneficios recibidos por agricultor
+      - SEMILLAS: Monto directo del beneficio
+      - FERTILIZANTES: Monto directo del beneficio
+      - MECANIZACIÓN: Hectáreas × tarifa específica (ARROZ: $200/ha, MAÍZ: $70/ha)
+    
+    Datos técnicos:
+    - Matriz ARROZ: $4,039.07/ha (costo total de producción)
+    - Matriz MAÍZ: $1,746.40/ha (costo total de producción)
+    - Mecanización ARROZ: "Arado + Fangueo" ($200.00/ha)
+    - Mecanización MAÍZ: "Arado + Rastra" ($70.00/ha)
+    
+    Returns:
+        ProductivoIndicadoresResponse: Indicador ponderado con estadísticas agregadas
+    """
+    try:
+        logger.info("Iniciando cálculo de indicadores productivos...")
+        
+        # Realizar análisis completo
+        resultado = indicadores_service.obtener_indicadores_completos()
+        
+        logger.info(f"Indicadores calculados. Reducción promedio: {resultado.indicador_reduccion_costos.porcentaje_promedio_reduccion:.2f}%")
+        
+        return resultado
+        
+    except Exception as e:
+        logger.error(f"Error al obtener indicadores productivos: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error interno al procesar indicadores productivos: {str(e)}"
         )
 
 # Manejador de errores global

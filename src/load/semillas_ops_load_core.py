@@ -15,7 +15,7 @@ from src.models.operational.operational.ubicaciones_ops import Ubicacion
 from src.models.operational.operational.organizaciones_ops import Organizacion
 from src.models.operational.operational.beneficio_base_ops import BeneficioBase
 from src.models.operational.operational.beneficio_semillas_ops import BeneficioSemillas
-from src.models.operational.operational.beneficiario_semillas_ops import BeneficiarioSemillas
+# from src.models.operational.operational.beneficiario_semillas_ops import BeneficiarioSemillas  # No existe en BD actual
 
 
 class SemillasOperationalLoaderCore:
@@ -224,25 +224,28 @@ class SemillasOperationalLoaderCore:
                 logger.warning(f"No se encontró persona para beneficiario")
                 continue
                 
-            beneficiarios_data.append({
-                'persona_id': int(persona_id),
-                'hectarias_totales': float(row.get('hectarias_totales')) if pd.notna(row.get('hectarias_totales')) else None,
-                'tipo_productor': 'AGRICULTOR'  # Default
-            })
+            # NOTA: BeneficiarioSemillas no existe en BD actual - código legacy comentado
+            # beneficiarios_data.append({
+            #     'persona_id': int(persona_id),
+            #     'tipo_productor': 'AGRICULTOR'  # Default
+            # })
         
-        if beneficiarios_data:
-            # UPSERT en batch
-            stmt = pg_insert(BeneficiarioSemillas).values(beneficiarios_data)
-            stmt = stmt.on_conflict_do_update(
-                index_elements=['persona_id'],
-                set_=dict(
-                    hectarias_totales=stmt.excluded.hectarias_totales,
-                    tipo_productor=stmt.excluded.tipo_productor
-                )
-            )
-            
-            session.execute(stmt)
-            self.stats['beneficiarios_semillas_insertados'] += len(beneficiarios_data)
+        # NOTA: BeneficiarioSemillas no existe en BD actual - sección legacy comentada
+        # if beneficiarios_data:
+        #     # UPSERT en batch
+        #     stmt = pg_insert(BeneficiarioSemillas).values(beneficiarios_data)
+        #     stmt = stmt.on_conflict_do_update(
+        #         index_elements=['persona_id'],
+        #         set_=dict(
+        #             tipo_productor=stmt.excluded.tipo_productor
+        #         )
+        #     )
+        #     
+        #     session.execute(stmt)
+        #     self.stats['beneficiarios_semillas_insertados'] += len(beneficiarios_data)
+        
+        # Para compatibilidad, mantener estadística en 0
+        self.stats['beneficiarios_semillas_insertados'] = 0
             
     def _load_beneficios(self, df: pd.DataFrame, session: Session):
         """Carga beneficios usando SQLAlchemy Core."""

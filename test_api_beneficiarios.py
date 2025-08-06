@@ -72,6 +72,14 @@ def test_api_beneficiarios():
             for cultivo in beneficiario.cultivos_beneficiados:
                 print(f"        - {cultivo.cultivo.value}: {cultivo.hectareas:.2f} ha")
         
+        print(f"\n5️⃣ DISTRIBUCIÓN POR CANTONES (TOP 10):")
+        for i, canton in enumerate(resultado.beneficiarios_por_canton[:10], 1):
+            print(f"   #{i}. {canton.canton}: {canton.total_beneficios:,} beneficios ({canton.porcentaje}%)")
+        
+        if len(resultado.beneficiarios_por_canton) > 10:
+            otros_cantones = sum(c.total_beneficios for c in resultado.beneficiarios_por_canton[10:])
+            print(f"   ... y {len(resultado.beneficiarios_por_canton) - 10:,} cantones más con {otros_cantones:,} beneficios")
+        
         print(f"\n📈 RESUMEN EJECUTIVO:")
         resumen = resultado.resumen
         print(f"   • Total beneficiarios únicos: {resumen.total_beneficiarios_unicos:,}")
@@ -136,6 +144,12 @@ def mostrar_resumen_implementacion():
    • Ordenado por número de subvenciones, luego por % ahorro
    • Análisis de efectividad de subsidios múltiples
    • Información personal completa incluida
+
+5️⃣ DISTRIBUCIÓN POR CANTONES:
+   • Total de beneficios otorgados por cantón
+   • Incluye todos los tipos de beneficios y cultivos
+   • Formato para gráfico de barras (X: Cantones, Y: Cantidad)
+   • Cantones nulos/vacíos se muestran como "N/A"
 
 💰 CÁLCULOS DE COSTOS:
    • Matriz ARROZ: $1,590.99/ha
