@@ -42,6 +42,25 @@ class IndicadorReduccionCostos(BaseModel):
         example=15678234.25
     )
     
+    # NUEVOS CAMPOS DE RENTABILIDAD
+    monto_rentabilidad_sin_subvencion: float = Field(
+        ..., 
+        description="Utilidad total sin considerar subsidios (Ingresos - Costos)",
+        example=8765432.10
+    )
+    
+    monto_rentabilidad_con_subvenciones: float = Field(
+        ..., 
+        description="Utilidad total considerando subsidios como ahorro adicional",
+        example=11222221.85
+    )
+    
+    porcentaje_incremento_rentabilidad: float = Field(
+        ..., 
+        description="Porcentaje de incremento en rentabilidad debido a subsidios",
+        example=28.05
+    )
+    
     metodologia: str = Field(
         default="Promedio ponderado por hectáreas y monto de beneficios",
         description="Metodología utilizada para el cálculo"

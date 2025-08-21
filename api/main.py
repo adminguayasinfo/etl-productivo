@@ -330,14 +330,31 @@ async def obtener_indicadores_productivos():
       - FERTILIZANTES: Monto directo del beneficio
       - MECANIZACIÓN: Hectáreas × tarifa específica (ARROZ: $200/ha, MAÍZ: $70/ha)
     
+    **Indicadores de Rentabilidad (NUEVOS):**
+    
+    **Indicador 2: Monto de rentabilidad sin subvención**
+    - Utilidad total que obtendrían los beneficiarios SIN considerar subsidios
+    - Fórmula: (Ingresos por hectárea - Costos por hectárea) × Hectáreas totales
+    - Ingresos ARROZ: $2,130.00/ha (60 sacas × $35.50), utilidad: $539.01/ha
+    - Ingresos MAÍZ: $3,440.00/ha (200 sacas × $17.20), utilidad: $1,604.70/ha
+    
+    **Indicador 3: Monto de rentabilidad con subvenciones**
+    - Utilidad total considerando que los subsidios se suman como ahorro adicional
+    - Fórmula: Rentabilidad sin subsidio + Monto total de beneficios recibidos
+    
+    **Indicador 4: Porcentaje de incremento en rentabilidad**
+    - Porcentaje de incremento debido a los subsidios del GAD
+    - Fórmula: ((Rentabilidad con subsidios - Rentabilidad sin subsidios) / Rentabilidad sin subsidios) × 100
+    - Equivale a: (Monto beneficios / Rentabilidad sin subsidios) × 100
+    
     Datos técnicos:
-    - Matriz ARROZ: $4,039.07/ha (costo total de producción)
-    - Matriz MAÍZ: $1,746.40/ha (costo total de producción)
+    - Matriz ARROZ: $1,590.99/ha (costo total de producción)
+    - Matriz MAÍZ: $1,835.30/ha (costo total de producción)
     - Mecanización ARROZ: "Arado + Fangueo" ($200.00/ha)
     - Mecanización MAÍZ: "Arado + Rastra" ($70.00/ha)
     
     Returns:
-        ProductivoIndicadoresResponse: Indicador ponderado con estadísticas agregadas
+        ProductivoIndicadoresResponse: Indicadores de reducción de costos y rentabilidad agregados
     """
     try:
         logger.info("Iniciando cálculo de indicadores productivos...")

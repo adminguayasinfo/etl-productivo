@@ -45,6 +45,12 @@ class IndicadoresService:
             'ARROZ': self.matriz_arroz.calcular_total_general(),
             'MAIZ': self.matriz_maiz.calcular_total_general()
         }
+        
+        # Cálculos de rentabilidad por hectárea (Ingresos - Costos)
+        self.rentabilidad_por_hectarea = {
+            'ARROZ': (self.matriz_arroz.rendimiento_sacas * self.matriz_arroz.precio_saca) - self.matriz_arroz.calcular_total_general(),
+            'MAIZ': (self.matriz_maiz.rendimiento_sacas * self.matriz_maiz.precio_saca) - self.matriz_maiz.calcular_total_general()
+        }
     
     def calcular_indicador_reduccion_costos(self) -> IndicadorReduccionCostos:
         """
@@ -84,7 +90,12 @@ class IndicadoresService:
                     WHEN tc.nombre = 'ARROZ' THEN b.hectareas_beneficiadas * {self.costos_produccion_por_hectarea['ARROZ']}
                     WHEN tc.nombre = 'MAIZ' THEN b.hectareas_beneficiadas * {self.costos_produccion_por_hectarea['MAIZ']}
                     ELSE 0 
-                END) as costo_sin_subsidios_total
+                END) as costo_sin_subsidios_total,
+                SUM(CASE 
+                    WHEN tc.nombre = 'ARROZ' THEN b.hectareas_beneficiadas * {self.rentabilidad_por_hectarea['ARROZ']}
+                    WHEN tc.nombre = 'MAIZ' THEN b.hectareas_beneficiadas * {self.rentabilidad_por_hectarea['MAIZ']}
+                    ELSE 0 
+                END) as rentabilidad_sin_subsidios_total
             FROM "etl-productivo".beneficio b
             INNER JOIN "etl-productivo".beneficiario ben ON b.beneficiario_id = ben.id
             INNER JOIN "etl-productivo".tipo_cultivo tc ON b.tipo_cultivo_id = tc.id
@@ -116,7 +127,10 @@ class IndicadoresService:
                     total_beneficiarios=0,
                     hectareas_totales=0.0,
                     monto_total_beneficios=0.0,
-                    costo_total_sin_subsidios=0.0
+                    costo_total_sin_subsidios=0.0,
+                    monto_rentabilidad_sin_subvencion=0.0,
+                    monto_rentabilidad_con_subvenciones=0.0,
+                    porcentaje_incremento_rentabilidad=0.0
                 )
             
             # Calcular promedio ponderado
@@ -125,11 +139,14 @@ class IndicadoresService:
             hectareas_totales = 0.0
             monto_total_beneficios = 0.0
             costo_total_sin_subsidios = 0.0
+            monto_rentabilidad_sin_subvencion_total = 0.0
+            monto_rentabilidad_con_subvenciones_total = 0.0
             
             for beneficiario in beneficiarios:
                 hectareas = float(beneficiario.hectareas_totales or 0)
                 monto_beneficios = float(beneficiario.monto_beneficios_total or 0)
                 costo_sin_subsidios = float(beneficiario.costo_sin_subsidios_total or 0)
+                rentabilidad_sin_subsidios = float(beneficiario.rentabilidad_sin_subsidios_total or 0)
                 
                 # Evitar divisiones por cero
                 if hectareas <= 0 or monto_beneficios <= 0 or costo_sin_subsidios <= 0:
@@ -145,16 +162,27 @@ class IndicadoresService:
                 suma_ponderada += porcentaje_reduccion * peso
                 suma_pesos += peso
                 
+                # Cálculos de rentabilidad para este beneficiario
+                rentabilidad_con_subsidios = rentabilidad_sin_subsidios + monto_beneficios
+                
                 # Acumular totales para estadísticas
                 hectareas_totales += hectareas
                 monto_total_beneficios += monto_beneficios
                 costo_total_sin_subsidios += costo_sin_subsidios
+                monto_rentabilidad_sin_subvencion_total += rentabilidad_sin_subsidios
+                monto_rentabilidad_con_subvenciones_total += rentabilidad_con_subsidios
             
             # Calcular promedio ponderado final
             if suma_pesos > 0:
                 promedio_ponderado = suma_ponderada / suma_pesos
             else:
                 promedio_ponderado = 0.0
+            
+            # Calcular porcentaje de incremento en rentabilidad
+            if monto_rentabilidad_sin_subvencion_total > 0:
+                porcentaje_incremento_rentabilidad = ((monto_rentabilidad_con_subvenciones_total - monto_rentabilidad_sin_subvencion_total) / monto_rentabilidad_sin_subvencion_total) * 100
+            else:
+                porcentaje_incremento_rentabilidad = 0.0
             
             logger.info(f"Indicador calculado: {promedio_ponderado:.2f}% para {len(beneficiarios)} beneficiarios")
             
@@ -163,7 +191,10 @@ class IndicadoresService:
                 total_beneficiarios=len(beneficiarios),
                 hectareas_totales=round(hectareas_totales, 2),
                 monto_total_beneficios=round(monto_total_beneficios, 2),
-                costo_total_sin_subsidios=round(costo_total_sin_subsidios, 2)
+                costo_total_sin_subsidios=round(costo_total_sin_subsidios, 2),
+                monto_rentabilidad_sin_subvencion=round(monto_rentabilidad_sin_subvencion_total, 2),
+                monto_rentabilidad_con_subvenciones=round(monto_rentabilidad_con_subvenciones_total, 2),
+                porcentaje_incremento_rentabilidad=round(porcentaje_incremento_rentabilidad, 2)
             )
             
         except Exception as e:
